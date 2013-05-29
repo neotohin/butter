@@ -111,6 +111,7 @@ class butter {
 
     $field = $extra + array(
         '#markup' => $markup,
+        '#weight' => $this->weight++,
       );
 
     if( empty($fieldset) )
