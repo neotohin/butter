@@ -75,6 +75,59 @@ class butter {
   }
 
   /**
+   * Creates Text Field
+   * @param string $name     Key of this text field
+   * @param string $fieldset Key of the fieldset that will contain this. Empty creates individual field
+   * @param string $label    Label of this field
+   * @param string $value    Default Value for this field
+   * @param array  $extra    Override Default Settings
+   */
+  public function textarea( $name, $fieldset = '', $label, $value = '', $extra = array()){
+
+    $field = $extra + array(
+        '#type' => 'textarea',
+        '#title' => $label,
+        '#default_value' => $value,
+        '#weight' => $this->weight++,
+      );
+
+    if( empty($fieldset) )
+    {
+      $this->form[$name] = $field;
+      $this->addInMainContentGroup( $name );
+    }else {
+      $this->form[ $fieldset ][$name] = $field;
+    }
+  }
+
+  /**
+   * Creates Text Format
+   * @param string $name     Key of this text field
+   * @param string $fieldset Key of the fieldset that will contain this. Empty creates individual field
+   * @param string $label    Label of this field
+   * @param string $value    Default Value for this field
+   * @param array  $extra    Override Default Settings
+   */
+  public function textFormat( $name, $fieldset = '', $label, $value = '', $extra = array()){
+
+    $field = $extra + array(
+        '#type' => 'text_format',
+        '#format' => 'full_html',
+        '#title' => $label,
+        '#default_value' => $value,
+        '#weight' => $this->weight++,
+      );
+
+    if( empty($fieldset) )
+    {
+      $this->form[$name] = $field;
+      $this->addInMainContentGroup( $name );
+    }else {
+      $this->form[ $fieldset ][$name] = $field;
+    }
+  }
+
+  /**
    * Creates Color Field
    * @param string $name     Key of this text field
    * @param string $fieldset Key of the fieldset that will contain this. Empty creates individual field
@@ -246,6 +299,33 @@ class butter {
       );
 
     $this->form[$name] = $field;
+  }
+
+  /**
+   * Creates Attached elements
+   * @param string $name     Key of this text field
+   * @param string $value    Default Value for this field
+   */
+  public function attached( $name, $value = ''){
+    $this->form['#attached'][$name] = $value;
+  }
+
+  /**
+   * Merge forms
+   * @param string $forms    array of forms
+   * @param string $fieldset Nested to fieldset or not
+   */
+  public function attachedForms($forms, $fieldset = ''){
+    $data = array();
+    foreach ($forms as $key => $value) {
+      $data = array_merge($data, $value);
+    }
+
+    if($fieldset) {
+      $this->form[$fieldset] = array_merge($this->form[$fieldset], $data);
+    } else {
+      $this->form = array_merge($this->form, $data);
+    }
   }
 
 }
